@@ -1,18 +1,44 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/binary"
+	"flag"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
 
 	"github.com/pkg/errors"
 )
+
+type args struct {
+	Hosts string
+	URL   string
+}
+
+// Parse ...
+func (a *args) Parse() {
+	flag.StringVar(
+		&a.Hosts,
+		"hosts",
+		"time.nist.gov:123,time.windows.com:123,time.google.com:123,time.apple.com:123,time.facebook.com:123",
+		"the list of hosts",
+	)
+	flag.StringVar(
+		&a.URL,
+		"url",
+		"https://gist.githubusercontent.com/mutin-sa/eea1c396b1e610a2da1e5550d94b0453/raw/f25741933f7729d63fcd23e6d9fc2ff1cddc170a/Public_Time_Servers.md",
+		"the url to containg a line by line list of time servers",
+	)
+	flag.Parse()
+}
 
 type ntpv4 struct {
 	Settings       uint8  // leap yr indicator, ver number, and mode
@@ -34,13 +60,9 @@ type ntpv4 struct {
 
 // https://datatracker.ietf.org/doc/html/rfc5905
 func main() {
-	hosts := []string{
-		"time.nist.gov:123",
-		"time.windows.com:123",
-		"time.google.com:123",
-		"time.apple.com:123",
-		"time.facebook.com:123",
-	}
+	// container for params
+	args := &args{}
+	args.Parse()
 
 	// register sig int/term
 	sigc := make(chan os.Signal, 1)
@@ -50,14 +72,41 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	// hosts input
+	hosts := make(chan string, 3)
+	go func() {
+		defer close(hosts)
+		for _, h := range strings.Split(args.Hosts, ",") {
+			hosts <- h
+		}
+		if args.URL != "" {
+			client := &http.Client{}
+			rsp, err := client.Get(args.URL)
+			if err != nil {
+				cancel()   // kill the context
+				panic(err) // never in production
+			}
+			defer rsp.Body.Close()
+			scanner := bufio.NewScanner(rsp.Body)
+			// optionally, resize scanner's capacity for lines over 64K, see next example
+			for scanner.Scan() {
+				line := strings.TrimSpace(scanner.Text())
+				switch {
+				case strings.HasSuffix(line, ":"), strings.HasPrefix(line, "#"), line == "":
+					continue
+				}
+				hosts <- line
+			}
+		}
+	}()
+
 	// a chan for responses
 	responses := make(chan response)
 	var wg sync.WaitGroup
-	for _, h := range hosts {
+	for h := range hosts {
 		wg.Add(1)
 		go func(host string) {
 			defer wg.Done()
-			defer fmt.Printf("%s is complete\n", host)
 			select {
 			case <-ctx.Done():
 				return // canceled
@@ -93,6 +142,9 @@ type response struct {
 }
 
 func timeFrom(host string) response {
+	if !strings.Contains(host, ":") {
+		host = host + ":123"
+	}
 	conn, err := net.Dial("udp", host)
 	if err != nil {
 		return response{err: errors.Wrap(err, "failed to connect:")}
