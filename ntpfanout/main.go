@@ -163,12 +163,12 @@ func timeFrom(host string) response {
 	req := &ntpv4{Settings: 0x1B}
 
 	if err := binary.Write(conn, binary.BigEndian, req); err != nil {
-		return response{err: errors.Wrap(err, "failed to send request: %v")}
+		return response{err: errors.Wrap(err, "failed to send request: %v", req)}
 	}
 
 	rsp := ntpv4{}
 	if err := binary.Read(conn, binary.BigEndian, &rsp); err != nil {
-		return response{err: errors.Wrap(err, "failed to read server response: %v")}
+		return response{err: errors.Wrap(err, "failed to read server response: %v", req)}
 	}
 
 	return response{host: host, ntp: rsp, err: nil}
