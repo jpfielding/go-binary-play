@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/jpfielding/go-binary-play/library";
+option java_multiple_files = true;
+option java_package = "com.github.jpfielding.gobinaryplay.library";
+option java_outer_classname = "LibraryProto";
+
+package library;
+
+// The greeting service definition.
+service Library {
+  // Sends a greeting
+  rpc Checkout (CheckoutRequest) returns (CheckoutReply) {}
+}
+
+// The request message containing the user's name.
+message CheckoutRequest {
+  string title = 1;
+}
+
+// The response message containing the greetings
+message CheckoutReply {
+  int64 availableOnDate = 1; // unix time
+}
