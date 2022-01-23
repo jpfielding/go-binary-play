@@ -19,6 +19,9 @@ var (
 	port = flag.Int("port", 50051, "The server port")
 )
 
+// taste test the local implementation and ensure it meets the interface
+var _ pb.LibraryServer = &server{}
+
 // server is used to implement helloworld.GreeterServer.
 type server struct {
 	pb.UnimplementedLibraryServer
