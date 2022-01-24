@@ -10,6 +10,7 @@ import (
 func main() {
 	all := make(chan chan int, 100)
 	for i := 0; i < 100; i++ {
+		// do this outside the
 		chint := make(chan int)
 		all <- chint
 		go func(chint chan int, ii int) {
