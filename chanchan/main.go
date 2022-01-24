@@ -13,14 +13,20 @@ func main() {
 		// do this outside the
 		chint := make(chan int)
 		all <- chint
+		// min time so we can be sure anything was consumed by concurrency
+		min := 10 * time.Millisecond
+		// some variation
+		maxRnd := rand.Intn(4) * int(time.Second)
 		go func(chint chan int, ii int) {
 			defer close(chint)
-			<-time.After(time.Millisecond * time.Duration(rand.Intn(1000)))
+			<-time.After(min + time.Duration(maxRnd))
 			chint <- ii
 		}(chint, i)
 	}
 	close(all)
 	for chint := range all {
-		fmt.Printf("found %d\n", <-chint)
+		now := time.Now()
+		i := <-chint
+		fmt.Printf("found %d %v\n", i, time.Since(now))
 	}
 }
