@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 )
 
@@ -13,13 +12,9 @@ func main() {
 		// do this outside the
 		chint := make(chan int)
 		all <- chint
-		// min time so we can be sure anything was consumed by concurrency
-		min := 10 * time.Millisecond
-		// some variation
-		maxRnd := rand.Intn(4) * int(time.Second)
 		go func(chint chan int, ii int) {
 			defer close(chint)
-			<-time.After(min + time.Duration(maxRnd))
+			<-time.After(5 * time.Second)
 			chint <- ii
 		}(chint, i)
 	}
