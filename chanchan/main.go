@@ -12,10 +12,10 @@ func main() {
 		// do this outside the
 		chint := make(chan int)
 		all <- chint
-		go func(chint chan int, ii int) {
+		go func(chint chan int, i int) {
 			defer close(chint)
 			<-time.After(5 * time.Second)
-			chint <- ii
+			chint <- i
 		}(chint, i)
 	}
 	close(all)
