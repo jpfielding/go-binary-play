@@ -1,0 +1,13 @@
+go 1.19
+
+use (
+	./attr_padlocks
+	./chanchan
+	./dragonpuzzle
+	./ldap
+	./library
+	./ntp
+	./ntpfanout
+	./simple
+	./simplechan
+)
