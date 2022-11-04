@@ -10,4 +10,5 @@ use (
 	./ntpfanout
 	./simple
 	./simplechan
+	./simple-web-server
 )
