@@ -1,0 +1,46 @@
+{
+    "name": "m2adapter",
+    "build": { 
+      "dockerfile": "../Dockerfile",
+      "context": "..",
+      "target": "base"
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "golang.go",
+          "bierner.markdown-mermaid",
+          "eamodio.gitlens",
+          "ms-vsliveshare.vsliveshare",
+          "ms-azuretools.vscode-docker",
+          "sourcegraph.sourcegraph"
+          ]
+      }
+    },
+    "mounts": [
+      {
+          "type": "bind",
+          "source": "${localEnv:HOME}/.gitconfig",
+          "target": "/root/.gitconfig"
+      },
+      {
+          "type": "bind",
+          "source": "${localEnv:HOME}/.git-credentials",
+          "target": "/root/.git-credentials"
+      },
+      { 
+          "type": "bind",
+          "source": "${localEnv:HOME}/.ssh",
+          "target": "/root/.ssh"
+      },
+      { 
+          "type": "bind",
+          "source": "/var/run/docker.sock",
+          "target": "/var/run/docker.sock"
+      }
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workdir/${localWorkspaceFolderBasename},type=bind,consistency=cached", 
+    "workspaceFolder": "/workdir/${localWorkspaceFolderBasename}",
+    "forwardPorts": []
+  }
+    
