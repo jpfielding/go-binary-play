@@ -1,6 +1,6 @@
 module github.com/jpfielding/go-binary-play/library
 
-go 1.19
+go 1.21.0
 
 require (
 	google.golang.org/grpc v1.50.1

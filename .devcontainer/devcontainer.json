@@ -8,9 +8,12 @@
     "customizations": {
       "vscode": {
         "extensions": [
-          "golang.go",
           "bierner.markdown-mermaid",
           "eamodio.gitlens",
+          "golang.go",
+          "GitHub.codespaces",
+          "GitHub.copilot",
+          "GitHub.copilot-labs",
           "ms-vsliveshare.vsliveshare",
           "ms-azuretools.vscode-docker",
           "sourcegraph.sourcegraph"

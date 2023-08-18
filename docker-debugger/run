@@ -1,0 +1,15 @@
+#!/bin/bash
+
+IMAGE=docker-debugger
+TARGET="$1"
+CMD=docker-debugger
+
+docker build -\
+    --target ${TARGET} .
+    -tag ${IMAGE}-${TARGET} \
+
+docker run -d \ 
+    -p 3000:3000 \
+    -p 4000:4000 \
+    --name ${IMAGE}-${TARGET} \
+    ${CMD}

@@ -1,6 +1,6 @@
 module github.com/jpfielding/go-binary-play/attr_padlocks
 
-go 1.19
+go 1.21.0
 
 require github.com/cloudflare/circl v1.2.0
 

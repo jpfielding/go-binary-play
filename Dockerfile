@@ -22,7 +22,7 @@ ENV INSTALL_PATH "/usr/local"
 ENV PATH ${HOME}/bin:${PATH}
 
 # go
-ENV GO_VERSION "1.20.5"
+ENV GO_VERSION "1.21.0"
 ENV PATH ${INSTALL_PATH}/go/bin:${GOPATH}/bin:${PATH}
 RUN set -eux && \
     export GO_ARCH="$(arch | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/')" && \
