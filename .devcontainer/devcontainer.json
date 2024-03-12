@@ -2,7 +2,7 @@
     "name": "m2adapter",
     "build": { 
       "dockerfile": "./Dockerfile",
-      "context": "..",
+      "context": ".",
       "target": "user",
       "args": {
         "USERNAME": "${localEnv:USER:gopher}"

@@ -1,12 +1,9 @@
 FROM rockylinux:8.5 as base
 
+ARG REPO_NAME=go-binary-play
 ARG USERNAME=gopher
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-
-# Add ca certs so we can build the image on vpn
-COPY leidos_cas.pem /etc/pki/ca-trust/source/anchors/custom_cas.pem 
-RUN update-ca-trust
 
 RUN set -eux -o pipefail && \
     dnf install -y curl dnf-utils dnf-plugins-core epel-release git jq ncurses sudo which rsync && \
@@ -18,14 +15,10 @@ RUN set -eux -o pipefail && \
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && \
     yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-# pretty bash
-COPY .bash_pretty /root/.bash_pretty
-RUN set -eux && \
-    echo "source /root/.bash_pretty" >> /root/.bashrc
-
 # envs
 ENV INSTALL_PATH "/usr/local"
 ENV PATH ${HOME}/bin:${PATH}
+
 # Create the user
 RUN groupadd --gid ${USER_GID} ${USERNAME} && \
   useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} -s /bin/zsh && \
@@ -33,6 +26,8 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} && \
   chmod 0440 /etc/sudoers.d/${USERNAME}
 
 ########### NON ROOT FROM HERE DOWN ###########
+FROM base as user
+
 USER ${USERNAME}
 
 RUN set -eux && \
