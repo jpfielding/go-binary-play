@@ -18,8 +18,7 @@
           "GitHub.copilot",
           "GitHub.copilot-labs",
           "ms-vsliveshare.vsliveshare",
-          "ms-azuretools.vscode-docker",
-          "sourcegraph.sourcegraph"
+          "ms-azuretools.vscode-docker"
           ]
       }
     },
