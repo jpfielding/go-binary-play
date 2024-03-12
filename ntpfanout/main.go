@@ -14,8 +14,6 @@ import (
 	"sync"
 	"syscall"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type args struct {
@@ -147,12 +145,12 @@ func timeFrom(host string) response {
 	}
 	conn, err := net.Dial("udp", host)
 	if err != nil {
-		return response{err: errors.Wrap(err, "failed to connect:")}
+		return response{err: fmt.Errorf("failed to connect: %w", err)}
 	}
 	defer conn.Close()
 	duration := time.Now().Add(15 * time.Second)
 	if err := conn.SetDeadline(duration); err != nil {
-		return response{err: errors.Wrap(err, "failed to set deadline: ")}
+		return response{err: fmt.Errorf("failed to set deadline: %w", err)}
 	}
 
 	// configure request settings by specifying the first byte as
@@ -163,12 +161,12 @@ func timeFrom(host string) response {
 	req := &ntpv4{Settings: 0x1B}
 
 	if err := binary.Write(conn, binary.BigEndian, req); err != nil {
-		return response{err: errors.Wrap(err, "failed to send request: %v", req)}
+		return response{err: fmt.Errorf("failed to send request: %w, %w", err, req)}
 	}
 
 	rsp := ntpv4{}
 	if err := binary.Read(conn, binary.BigEndian, &rsp); err != nil {
-		return response{err: errors.Wrap(err, "failed to read server response: %v", req)}
+		return response{err: fmt.Errorf("failed to read server response: %w %v", err, req)}
 	}
 
 	return response{host: host, ntp: rsp, err: nil}

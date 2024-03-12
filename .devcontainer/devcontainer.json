@@ -1,9 +1,12 @@
 {
     "name": "m2adapter",
     "build": { 
-      "dockerfile": "../Dockerfile",
+      "dockerfile": "./Dockerfile",
       "context": "..",
-      "target": "base"
+      "target": "user",
+      "args": {
+        "USERNAME": "${localEnv:USER:gopher}"
+      }  
     },
     "customizations": {
       "vscode": {
