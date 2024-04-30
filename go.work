@@ -11,4 +11,5 @@ use (
 	./simple
 	./simplechan
 	./simple-web-server
+	./sonic-io
 )
