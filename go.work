@@ -1,13 +1,15 @@
-go 1.22.0
+go 1.23
 
 use (
 	./attr_padlocks
 	./chanchan
 	./dragonpuzzle
+	./fanout
 	./ldap
 	./library
 	./ntp
 	./ntpfanout
+	./publisher
 	./simple
 	./simplechan
 	./simple-web-server

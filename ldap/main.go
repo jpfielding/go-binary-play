@@ -37,6 +37,6 @@ func main() {
 			os.Exit(1)
 		}
 		// Handle connections in a new goroutine.
-		go Serve(conn)
+		go (&Session{}).Serve(conn)
 	}
 }

@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	pb "go-binary-play/library/proto"
+	pb "github.com/jpfielding/go-binary-play/library/proto"
 
 	"google.golang.org/grpc"
 )

@@ -40,7 +40,7 @@ ENV SDK_HOME ${HOME}/sdk
 ENV PATH ${HOME}/bin:${PATH}
 
 # go
-ENV GO_VERSION "1.22.2"
+ENV GO_VERSION "1.23.3"
 ENV GOPATH ${SDK_HOME}/go
 ENV PATH ${GOPATH}/bin:${HOME}/sdk/go:${PATH}
 RUN set -eux && \
