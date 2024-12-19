@@ -4,14 +4,13 @@ use (
 	./attr_padlocks
 	./chanchan
 	./dragonpuzzle
-	./fanout
 	./ldap
 	./library
 	./ntp
 	./ntpfanout
-	./publisher
 	./simple
 	./simplechan
 	./simple-web-server
 	./sonic-io
+	./util
 )
