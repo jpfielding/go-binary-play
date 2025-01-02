@@ -1,6 +1,6 @@
 FROM rockylinux:8.5 as base
 
-ARG REPO_NAME=go-binary-play
+ARG REPO_NAME=go-play
 ARG USERNAME=gopher
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
